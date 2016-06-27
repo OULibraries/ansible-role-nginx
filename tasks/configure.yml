@@ -1,8 +1,8 @@
 ---
 - name: Diffie Hellman ephemeral parameters
   command: openssl dhparam -out dhparam.pem 4096
-  chdir: "{{ nginx_cert_path }}"
-  creates: "{{ nginx_cert_path }}/dhparam.pem"
+    chdir: "{{ nginx_cert_path }}"
+    creates: "{{ nginx_cert_path }}/dhparam.pem"
 - name: Nginx Config
   template:
     src: nginx.conf.j2

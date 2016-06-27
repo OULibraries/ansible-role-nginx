@@ -17,5 +17,5 @@
      -days 90 
      -keyout "{{ nginx_key_path }}"/star."{{ item }}"/privkey.pem 
      -out "{{ nginx_cert_path }}"/star."{{ item }}"/cert.pem
-  creates: "{{ nginx_key_path }}/star.{{ item }}/privkey.pem"
+    creates: "{{ nginx_key_path }}/star.{{ item }}/privkey.pem"
   with_items: nginx_star_sites
