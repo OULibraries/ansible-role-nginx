@@ -1,0 +1,20 @@
+---
+- name: Ensure /srv/robots exists
+  file:
+    path: /srv/robots
+    state: directory
+    mode: 0755
+    owner: root
+    group: wheel
+    recurse: yes
+
+- name: files to /srv/robots
+  copy:
+    src: "{{ item }}"
+    dest: /srv/robots
+    mode: 0644
+    owner: root
+    group: wheel
+  with_items:
+    - robots.dissallow.txt
+    - robots.dspace.txt 

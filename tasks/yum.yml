@@ -12,7 +12,7 @@
     section: nginx
     option: priority
     value: 2
-  backup: yes
+    backup: yes
 - name: Install yum packages
   yum:
     name: "{{ item }}"
