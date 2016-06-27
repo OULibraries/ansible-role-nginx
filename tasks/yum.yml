@@ -1,0 +1,21 @@
+---
+- name: Add nginx yum repository
+  yum_repository:
+    name: nginx.repo
+    description: Nginx Repository
+    baseurl: http://nginx.org/packages/centos/7/$basearch/
+    gpgkey: http://nginx.org/packages/keys/nginx_signing.key
+    gpgcheck: yes
+- name: Nginx repository has priority
+  ini_file:
+    dest: /etc/yum.repos.d/nginx.repo
+    section: nginx
+    option: priority
+    value: 2
+  backup: yes
+- name: Install yum packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nginx

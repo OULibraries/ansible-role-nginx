@@ -1,0 +1,21 @@
+---
+- name: SSL cert directory exists
+  file:
+    path: "{{ nginx_cert_path }}/star.{{ item }}"
+    state: directory
+  with_items: nginx_star_sites
+- name: SSL key directory exists
+  file:
+    path: "{{ nginx_key_path }}/star.{{ item }}"
+    state: directory
+  with_items: nginx_star_sites
+- name: Self-signed cert exists.
+  sudo: yes
+  command: >
+     openssl req -newkey rsa:2048 -nodes -sha256 -x509i 
+     -subj "/C=US/ST=Oklahoma/L=Norman/O=University of Oklahoma/OU=Library Technology Platforms/CN=*.{{ item }}" 
+     -days 90 
+     -keyout "{{ nginx_key_path }}"/star."{{ item }}"/privkey.pem 
+     -out "{{ nginx_cert_path }}"/star."{{ item }}"/cert.pem
+  creates: "{{ nginx_key_path }}/star.{{ item }}/privkey.pem"
+  with_items: nginx_star_sites

@@ -1,0 +1,17 @@
+---
+- name: Diffie Hellman ephemeral parameters
+  command: openssl dhparam -out dhparam.pem 4096
+  chdir: "{{ nginx_cert_path }}"
+  creates: "{{ nginx_cert_path }}/dhparam.pem"
+- name: Nginx Config
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: 0644
+    owner: root
+    group: wheel
+- name: Site config
+  template:
+    src: star.site.conf.j2
+    dest: "star.{{ item.name }}.conf
+  with_items: nginx_star_sites

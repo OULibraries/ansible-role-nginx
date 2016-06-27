@@ -1,0 +1,13 @@
+---
+# tasks file for nginx
+- include: yum.yml
+  sudo: yes
+- include: configure.yml
+  sudo: yes
+- include: ssl-selfsign.yml
+  sudo: yes
+- include: vmware.yml
+  when: (ansible_virtualization_type == "VMware") and (ansible_virtualization_role == "guest")
+  sudo: yes
+- include: services.yml
+  sudo: yes

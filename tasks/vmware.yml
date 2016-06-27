@@ -1,0 +1,8 @@
+---
+- name: Apply iptables template
+  template:
+    src: iptables.j2
+    dest: /etc/sysconfig/iptables
+    mode: 0600
+    owner: root
+    group: root

@@ -1,0 +1,49 @@
+{% for upstream in item %}
+upstream {{ upstream.name }} {
+{% for ip in upstream %}
+  server             {{ ip }}:443;
+}
+{% endfor %}
+{% endfor %}
+
+server {
+  listen              80;
+  server_name         *.{{ item.name }};
+  return 301          https://$host$request_uri;
+}
+
+server {
+  listen              443;
+  server_name         *.{{ item.name }};
+
+  ssl                 on;
+  ssl_certificate     {{ nginx_key_path }}/star.{{ item.name }}/cert.pem;
+  ssl_certificate_key {{ nginx_key_path }}/star.{{ item.name }}/privkey.pem;
+
+  access_log          /var/log/nginx/star.{{ item.name }}.access.log;
+
+  # Global Proxy settings for this server_name
+  proxy_set_header    Host $host;
+  proxy_set_header    X-Real-IP $remote_addr;
+  proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header    X-Forwarded-Proto $scheme;
+
+{% if item.robots == "disallow" %}
+  # robots.txt overlay
+  location =/robots.txt {
+    alias             /srv/robots/robots.disallow.txt;
+  }
+{% elif item.robots == "dspace" %}
+  # robots.txt overlay
+  location =/robots.txt {
+    alias             /srv/robots/robots.dspace.txt;
+  }
+{% endif %}
+
+  # root
+  location / {
+    # Make sure we keep this nginx setting intact
+    add_header        X-Content-Type-Options nosniff;
+    proxy_pass        https://{{ item.name }}/;
+  }
+}
