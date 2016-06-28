@@ -1,4 +1,8 @@
 ---
+- name: SSL cache directory exists
+  file:
+    path: /var/lib/nginx/cache
+    state: directory
 - name: Diffie Hellman ephemeral parameters
   command: openssl dhparam -out dhparam.pem 4096
   args:
