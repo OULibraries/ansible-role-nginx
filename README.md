@@ -20,17 +20,17 @@ You'll need to define hostnames, backend ip, and an optional robots.txt overlay,
 ```
 nginx_star_sites:
  - name: example.com
-   upstream:
+   upstreams:
      - name: example-dev
-       ip:
+       ips:
          - 192.168.1.10
          - 192.168.1.11
          - 192.168.1.12
    robots: disallow
  - name: dspace.example.com
-   upstream:
+   upstreams:
      - name: dspace-dev
-       ip:
+       ips:
          - 192.168.1.13
    robots: dspace
 ```

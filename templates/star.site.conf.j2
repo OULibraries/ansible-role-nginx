@@ -1,6 +1,6 @@
-{% for upstream in item %}
+{% for upstream in item.upstreams %}
 upstream {{ upstream.name }} {
-{% for ip in upstream %}
+{% for ip in upstream.ips %}
   server             {{ ip }}:443;
 }
 {% endfor %}
@@ -44,6 +44,6 @@ server {
   location / {
     # Make sure we keep this nginx setting intact
     add_header        X-Content-Type-Options nosniff;
-    proxy_pass        https://{{ item.name }}/;
+    proxy_pass        https://{{ item.upstreams.0.name }}/;
   }
 }
