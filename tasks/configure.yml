@@ -5,6 +5,13 @@
     state: directory
     owner: nginx
     group: nginx
+- name: LetsEncrypt Certbot directory exists
+  file:
+    path: /srv/certbot/.well-known/acme-challenge
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
 - name: Diffie Hellman ephemeral parameters
   command: openssl dhparam -out dhparam.pem 4096
   args:

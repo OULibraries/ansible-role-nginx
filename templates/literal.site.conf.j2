@@ -9,7 +9,16 @@ upstream {{ upstream.name }} {
 server {
   listen              80;
   server_name         {{ item.name }};
-  return 301          https://$host$request_uri;
+
+  # Let's Encrypt CertBot
+  location /.well-known/acme-challenge {
+    alias /srv/certbot/.well-known/acme-challenge;
+  }
+
+  # root
+  location / {
+    return 301 https://$host$request_uri;
+  }
 }
 
 server {
