@@ -3,6 +3,8 @@
   file:
     path: /var/lib/nginx/cache
     state: directory
+    owner: nginx
+    group: nginx
 - name: Diffie Hellman ephemeral parameters
   command: openssl dhparam -out dhparam.pem 4096
   args:

@@ -27,6 +27,10 @@ server {
   proxy_set_header    X-Real-IP $remote_addr;
   proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_set_header    X-Forwarded-Proto $scheme;
+  proxy_cache_valid 200 301 302 401 403 404 5m;
+  proxy_cache_bypass $no_cache $http_cache_control;
+  proxy_cache_revalidate  on;
+  proxy_cache cache;
 
 {% if item.robots == "disallow" %}
   # robots.txt overlay
