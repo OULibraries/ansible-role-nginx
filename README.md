@@ -33,9 +33,18 @@ nginx_star_sites:
        ips:
          - 192.168.1.13
    robots: dspace
+nginx_literal_sites:
+ - name: 1.example.com
+   upstreams:
+     - name: 1-example-dev
+       ips:
+         - 192.168.1.13
+         - 192.168.1.14
+         - 192.168.1.15
+   robots: disallow
 ```
 
-Any name you enter will be configured with `*.` in front of it.
+Any name you enter for a star site will be configured with `*.` in front of it.
 
 See defaults/main.yml for the rest
 

@@ -17,8 +17,13 @@
     mode: 0644
     owner: root
     group: wheel
-- name: Site config
+- name: Wildcard site config
   template:
     src: star.site.conf.j2
     dest: "/etc/nginx/conf.d/star.{{ item.name }}.conf"
   with_items: "{{ nginx_star_sites }}"
+- name: Literal site config
+  template:
+    src: literal.site.conf.j2
+    dest: "/etc/nginx/conf.d/star.{{ item.name }}.conf"
+  with_items: "{{ nginx_literal_sites }}"

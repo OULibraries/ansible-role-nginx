@@ -6,7 +6,10 @@
 - include: configure.yml
   sudo: yes
 
-- include: ssl-selfsign.yml
+- include: ssl-selfsign-star.yml
+  sudo: yes
+
+- include: ssl-selfsign-literal.yml
   sudo: yes
 
 - include: assets.yml
