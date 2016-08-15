@@ -1,7 +1,7 @@
 {% for upstream in item.upstreams %}
 upstream {{ upstream.name }} {
-{% for ip in upstream.ips %}
-  server             {{ ip }}:443;
+{% for server in upstream.servers %}
+  server             {{ server }};
 }
 {% endfor %}
 {% endfor %}
