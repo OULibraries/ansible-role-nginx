@@ -32,5 +32,5 @@
 - name: Literal site config
   template:
     src: literal.site.conf.j2
-    dest: "/etc/nginx/conf.d/star.{{ item.name }}.conf"
+    dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
   with_items: "{{ nginx_literal_sites }}"
