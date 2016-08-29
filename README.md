@@ -65,7 +65,7 @@ Dependencies
 
 Example Playbook
 ----------------
-Am example vagrant playbook.
+An example vagrant playbook.
 
 ```
 - hosts: nginx.vagrant.local
@@ -79,6 +79,8 @@ Am example vagrant playbook.
   roles:
     - OULibraries.nginx
 ```
+
+This example has a pretask that copies over static DH parameters to speed provisioning.  This is fine for a test environment, but not suitable for production.
 
 License
 -------
