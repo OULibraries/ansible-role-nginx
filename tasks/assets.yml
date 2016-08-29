@@ -17,4 +17,14 @@
     group: wheel
   with_items:
     - robots.dissallow.txt
-    - robots.dspace.txt 
+    - robots.dspace.txt
+
+- name: Set default SELinux context for robots
+  command: >
+    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ robots_path }}(/.*)?"
+  sudo: yes
+
+- name: Restore default SELinux context for robots
+  command: >
+    restorecon -rv {{ robots_path }}
+  sudo: yes

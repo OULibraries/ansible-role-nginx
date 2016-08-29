@@ -1,10 +1,12 @@
 ---
+
 - name: SSL cache directory exists
   file:
     path: /var/lib/nginx/cache
     state: directory
     owner: nginx
     group: nginx
+
 - name: LetsEncrypt Certbot directory exists
   file:
     path: "{{ certbot_path }}/.well-known/acme-challenge"
@@ -12,11 +14,23 @@
     recurse: yes
     owner: nginx
     group: nginx
+
+- name: Set default SELinux context for robots
+  command: >
+    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ certbot_path }}(/.*)?"
+  sudo: yes
+
+- name: Restore default SELinux context for robots
+  command: >
+    restorecon -rv {{ certbot_path }}
+  sudo: yes
+
 - name: Diffie Hellman ephemeral parameters
   command: openssl dhparam -out dhparam.pem 4096
   args:
     chdir: "{{ nginx_cert_path }}"
     creates: "{{ nginx_cert_path }}/dhparam.pem"
+
 - name: Nginx Config
   template:
     src: nginx.conf.j2
@@ -24,11 +38,13 @@
     mode: 0644
     owner: root
     group: wheel
+
 - name: Wildcard site config
   template:
     src: star.site.conf.j2
     dest: "/etc/nginx/conf.d/star.{{ item.name }}.conf"
   with_items: "{{ nginx_star_sites }}"
+
 - name: Literal site config
   template:
     src: literal.site.conf.j2
