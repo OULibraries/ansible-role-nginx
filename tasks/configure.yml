@@ -25,6 +25,14 @@
     restorecon -rv {{ certbot_path }}
   sudo: yes
 
+- name: LetsEncrypt auto-renew cronjob
+  copy:
+    src: letsencrypt-daily.cron
+    dest: /etc/cron.daily/letsencrypt-daily.cron
+    mode: 0744
+    owner: root
+    group: root
+
 - name: Diffie Hellman ephemeral parameters
   command: openssl dhparam -out dhparam.pem 4096
   args:
