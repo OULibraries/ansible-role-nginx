@@ -19,7 +19,9 @@
     state: present
   with_items:
     - gcc
+    - libffi-devel
     - nginx
     - openssl-devel
     - python-devel
     - python-pip
+    - python2-dialog

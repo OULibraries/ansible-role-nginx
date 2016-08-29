@@ -1,17 +1,17 @@
 ---
-- name: Ensure /srv/robots exists
+- name: Ensure robots directory exists
   file:
-    path: /srv/robots
+    path: "{{ robots_path }}"
     state: directory
     mode: 0755
     owner: root
     group: wheel
     recurse: yes
 
-- name: files to /srv/robots
+- name: files to robots directory
   copy:
     src: "{{ item }}"
-    dest: /srv/robots
+    dest: "{{ robots_path }}"
     mode: 0644
     owner: root
     group: wheel

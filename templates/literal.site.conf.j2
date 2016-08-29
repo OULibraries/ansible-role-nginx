@@ -12,7 +12,7 @@ server {
 
   # Let's Encrypt CertBot
   location /.well-known/acme-challenge {
-    alias /srv/certbot/.well-known/acme-challenge;
+    alias {{ certbot_path }}/.well-known/acme-challenge;
   }
 
   # root

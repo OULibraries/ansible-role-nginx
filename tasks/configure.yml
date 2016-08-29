@@ -7,7 +7,7 @@
     group: nginx
 - name: LetsEncrypt Certbot directory exists
   file:
-    path: /srv/certbot/.well-known/acme-challenge
+    path: "{{ certbot_path }}/.well-known/acme-challenge"
     state: directory
     recurse: yes
     owner: nginx

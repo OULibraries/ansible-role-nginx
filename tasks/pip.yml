@@ -2,6 +2,9 @@
 - name: Pip Packages
   pip:
     name: "{{ item }}"
-    state: present
+    state: latest
   with_items:
-    -  letsencrypt
+    - cryptography
+    - letsencrypt
+    - pip
+    - requests
