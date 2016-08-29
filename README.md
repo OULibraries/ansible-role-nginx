@@ -2,8 +2,18 @@ OULibraries.nginx
 =========
 
 Nginx webserver for OU Libraries. Uses official nginx stable repository.
-Currently, I've only added the sauce for self-signed certs.
-Also, it only proxies the first upstream defined per site.
+It only proxies the first upstream defined per site.
+
+Installs LetsEncrypt Certbot, but doesn't actually run letsencrypt for you.  Assuming you have DNS correctly configured alread, you should be able to run the following after applying this role:
+
+```
+sudo certbot certonly --webroot -w /srv/certbot/.well-known/acme-challenge -d site.example.com --email email@example.com --agree-tos
+
+```
+
+and have appropriately certificates created. This role is currently too dumb to handle the changeover of self-signed certs to real certs in the nginx config, so you're on your own at the moment.
+
+
 Will add more stuff later.
 
 Requirements
@@ -55,7 +65,20 @@ Dependencies
 
 Example Playbook
 ----------------
+Am example vagrant playbook.
 
+```
+- hosts: nginx.vagrant.local
+  sudo: yes
+  vars_files:
+    - my-vars.yml
+  pre_tasks:
+    - copy:
+        src: /vagrant/dhparam.pem
+        dest: "{{ nginx_cert_path }}/dhparam.pem"
+  roles:
+    - OULibraries.nginx
+```
 
 License
 -------
