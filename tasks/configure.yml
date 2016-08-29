@@ -15,12 +15,12 @@
     owner: nginx
     group: nginx
 
-- name: Set default SELinux context for robots
+- name: Set default SELinux context for Certbot
   command: >
     semanage fcontext -a -t httpd_sys_rw_content_t  "{{ certbot_path }}(/.*)?"
   sudo: yes
 
-- name: Restore default SELinux context for robots
+- name: Restore default SELinux context for Certbot
   command: >
     restorecon -rv {{ certbot_path }}
   sudo: yes
