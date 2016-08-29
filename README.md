@@ -4,14 +4,14 @@ OULibraries.nginx
 Nginx webserver for OU Libraries. Uses official nginx stable repository.
 It only proxies the first upstream defined per site.
 
-Installs LetsEncrypt Certbot, but doesn't actually run letsencrypt for you.  Assuming you have DNS correctly configured alread, you should be able to run the following after applying this role:
+Installs LetsEncrypt Certbot, but doesn't actually run letsencrypt for you.  It should automatically renew any certificates created through Certbot, however. Assuming you have DNS correctly configured alread, you should be able to run the following after applying this role:
 
 ```
-sudo certbot certonly --webroot -w /srv/certbot/.well-known/acme-challenge -d site.example.com --email email@example.com --agree-tos
+sudo certbot certonly --webroot -w /srv/certbot -d site.example.com --email email@example.com --agree-tos
 
 ```
 
-and have appropriately certificates created. This role is currently too dumb to handle the changeover of self-signed certs to real certs in the nginx config, so you're on your own at the moment.
+and have appropriately certificates created. You'll need to substitute in appropriate directories, hostnames, and email addresses. This role is currently too dumb to handle the changeover of self-signed certs to real certs in the nginx config, so you're on your own at the moment.
 
 
 Will add more stuff later.
