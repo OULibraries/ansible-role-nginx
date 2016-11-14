@@ -73,12 +73,12 @@ http {
     proxy_hide_header       Server;
     proxy_hide_header       X-Powered-By;
 
-    ## Some proxy buffer settings pulled verbatim from a guide
+    ## Some proxy buffer settings pulled from a guide and modified
     ## https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching
     proxy_buffering on;
-    proxy_buffer_size 1k;
-    proxy_buffers 24 8k;
-    proxy_busy_buffers_size 8k;
+    proxy_buffer_size 32k;
+    proxy_buffers 24 16k;
+    proxy_busy_buffers_size 32k;
     proxy_max_temp_file_size 2048m;
     proxy_temp_file_write_size 32k;
     proxy_read_timeout  180s;
