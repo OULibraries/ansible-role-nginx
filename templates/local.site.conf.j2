@@ -1,0 +1,36 @@
+server {
+  listen              80;
+  server_name         {{ item.name }};
+
+  # Let's Encrypt CertBot
+  location /.well-known/acme-challenge {
+    alias {{ certbot_path }}/.well-known/acme-challenge;
+  }
+
+  # root
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+
+server {
+  listen              443;
+  server_name         {{ item.name }};
+
+  ssl                 on;
+  ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/cert.pem;
+  ssl_certificate_key {{ nginx_key_path }}/{{ item.name }}/privkey.pem;
+
+  access_log          /var/log/nginx/{{ item.name }}.access.log;
+
+
+{% if item.robots == "disallow" %}
+  # robots.txt overlay
+  location =/robots.txt {
+    alias             /srv/robots/robots.disallow.txt;
+  }
+{% endif %}
+
+
+
+}

@@ -1,0 +1,22 @@
+---
+- name: SSL local cert directory exists
+  file:
+    path: "{{ nginx_cert_path }}/{{ item.name }}"
+    state: directory
+  with_items: nginx_local_sites
+- name: SSL local key directory exists
+  file:
+    path: "{{ nginx_key_path }}/{{ item.name }}"
+    state: directory
+  with_items: nginx_local_sites
+- name: Self-signed local cert exists.
+  sudo: yes
+  command: >
+     openssl req -newkey rsa:2048 -nodes -sha256 -x509 
+     -subj "/CN={{ item.name }}" 
+     -days 90 
+     -keyout "{{ nginx_key_path }}"/"{{ item.name }}"/privkey.pem 
+     -out "{{ nginx_cert_path }}"/"{{ item.name }}"/cert.pem
+  args:
+    creates: "{{ nginx_key_path }}/{{ item.name }}/privkey.pem"
+  with_items: nginx_local_sites
