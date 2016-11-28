@@ -1,15 +1,15 @@
 ---
-- name: SSL local cert directory exists
+- name: SSL stub cert directory exists
   file:
     path: "{{ nginx_cert_path }}/{{ item.name }}"
     state: directory
-  with_items: nginx_local_sites
+  with_items: nginx_stub_sites
 - name: SSL local key directory exists
   file:
     path: "{{ nginx_key_path }}/{{ item.name }}"
     state: directory
-  with_items: nginx_local_sites
-- name: Self-signed local cert exists.
+  with_items: nginx_stub_sites
+- name: Self-signed stub cert exists.
   sudo: yes
   command: >
      openssl req -newkey rsa:2048 -nodes -sha256 -x509 
@@ -19,4 +19,4 @@
      -out "{{ nginx_cert_path }}"/"{{ item.name }}"/cert.pem
   args:
     creates: "{{ nginx_key_path }}/{{ item.name }}/privkey.pem"
-  with_items: nginx_local_sites
+  with_items: nginx_stub_sites

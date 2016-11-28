@@ -8,4 +8,4 @@ robots_path: /srv/robots
 
 # Default to no local sites to maintain compatibility with existing
 # playbooks.
-nginx_local_sites: []
+nginx_stub_sites: []
