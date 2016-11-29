@@ -59,8 +59,14 @@
     dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
   with_items: "{{ nginx_literal_sites }}"
 
-- name: Stub site config
+- name: Add stub site config
   template:
     src: stub.site.conf.j2
     dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
+  with_items: "{{ nginx_stub_sites }}"
+
+- name: Add stub site config
+  file:
+    state: touch 
+    dest: "/etc/nginx/conf.d/{{ item.name }}.conf.inc"
   with_items: "{{ nginx_stub_sites }}"

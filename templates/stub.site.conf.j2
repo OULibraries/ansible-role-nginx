@@ -23,6 +23,8 @@ server {
 
   access_log          /var/log/nginx/{{ item.name }}.access.log;
 
+  # Application provided config for {{ item.name }}
+  include /etc/nginx/conf.d/{{ item.name }}.conf.inc;
 
 {% if item.robots == "disallow" %}
   # robots.txt overlay
