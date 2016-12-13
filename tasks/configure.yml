@@ -65,8 +65,22 @@
     dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
   with_items: "{{ nginx_stub_sites }}"
 
-- name: Add stub site config
+- name: Add stub site config folder
   file:
-    state: touch 
-    dest: "/etc/nginx/conf.d/{{ item.name }}.conf.inc"
+    state: directory
+    recurse: yes 
+    dest: "/srv/{{ item.name }}/etc/"
   with_items: "{{ nginx_stub_sites }}"
+
+- name: Add stub site config file
+  file:
+    state: touch
+    dest: "/srv/{{ item.name }}/etc/{{ item.name }}.nginx.conf"
+  with_items: "{{ nginx_stub_sites }}"
+
+- name: Set  SELinux context for stub config
+  shell: |
+    semanage fcontext -a -t httpd_config_t "/srv/{{ item.name }}/etc(/.*)"
+    restorecon -rv "/srv/{{ item.name }}/etc/"
+  with_items: "{{ nginx_stub_sites }}"
+  sudo: yes
