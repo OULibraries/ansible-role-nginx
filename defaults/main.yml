@@ -5,3 +5,7 @@ nginx_cert_path: /etc/pki/tls/certs
 nginx_key_path: /etc/pki/tls/private
 certbot_path: /srv/certbot
 robots_path: /srv/robots
+
+# Default to no local sites to maintain compatibility with existing
+# playbooks.
+nginx_stub_sites: []

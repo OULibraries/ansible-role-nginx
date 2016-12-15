@@ -15,6 +15,9 @@
 - include: ssl-selfsign-literal.yml
   sudo: yes
 
+- include: ssl-selfsign-stub.yml
+  sudo: yes
+
 - include: assets.yml
   sudo: yes
   tags: assets

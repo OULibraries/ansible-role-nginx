@@ -51,6 +51,9 @@ nginx_literal_sites:
          - 192.168.1.14:9445
          - 192.168.1.15:9955
    robots: disallow
+nginx_stub_sites:
+ - name: 1.example.com
+   robots: disallow
 ```
 
 All backends must use SSL regardless of port.
