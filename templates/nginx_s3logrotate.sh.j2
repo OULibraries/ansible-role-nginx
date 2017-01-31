@@ -1,0 +1,14 @@
+#!/bin/bash
+# dump some access logs into an s3 bucket
+# Inspired by
+# https://gist.github.com/tovbinm/1880359
+# and
+# https://codestory.me/logrotate-apachenginx-access-logs-s3/
+
+NGINX_LOG_PATH='/var/log/nginx'
+LOG_GLOB='*access.log-$(date +%Y%m%d).gz'
+BUCKET_NAME='{{ nginx_s3_logbucket }}'
+AWS_CLI='/usr/bin/aws'
+
+find $NGINX_LOG_PATH -type f -name "$LOG_GLOB" -exec sudo -u nginx \
+bash -c "$AWS_CLI s3 cp {} s3://$BUCKET_NAME/log/\$(hostname)/nginx/\$(basename {})" \;
