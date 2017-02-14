@@ -26,9 +26,13 @@ server {
   server_name         {{ item.name }};
 
   ssl                 on;
-  ssl_certificate     {{ item.cert_path | default(nginx_cert_path) }}/{{ item.name }}/fullchain.pem;
-  ssl_certificate_key {{ item.key_path | default(nginx_key_path) }}/{{ item.name }}/privkey.pem;
-
+{% if item.cert_type == "letsencrypt" %}
+  ssl_certificate     {{ nginx_letsencrypt_live_cert_path }}/{{ item.name }}/fullchain.pem;
+  ssl_certificate_key {{ nginx_letsencrypt_live_cert_path }}/{{ item.name }}/privkey.pem;
+{% else %}
+  ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/fullchain.pem;
+  ssl_certificate_key {{ nginx_key_path }}/{{ item.name }}/privkey.pem;
+{% endif %}
   access_log          /var/log/nginx/{{ item.name }}.access.log;
 
   # Global Proxy settings for this server_name
