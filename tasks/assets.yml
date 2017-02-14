@@ -1,7 +1,7 @@
 ---
 - name: Ensure robots directory exists
   file:
-    path: "{{ robots_path }}"
+    path: "{{ nginx_robots_htdocs_path }}"
     state: directory
     mode: 0755
     owner: root
@@ -11,7 +11,7 @@
 - name: files to robots directory
   copy:
     src: "{{ item }}"
-    dest: "{{ robots_path }}"
+    dest: "{{ nginx_robots_htdocs_path }}"
     mode: 0644
     owner: root
     group: wheel
@@ -21,10 +21,10 @@
 
 - name: Set default SELinux context for robots
   command: >
-    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ robots_path }}(/.*)?"
+    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_robots_htdocs_path }}(/.*)?"
   sudo: yes
 
 - name: Restore default SELinux context for robots
   command: >
-    restorecon -rv {{ robots_path }}
+    restorecon -rv {{ nginx_robots_htdocs_path }}
   sudo: yes

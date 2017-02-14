@@ -9,7 +9,7 @@
 
 - name: LetsEncrypt Certbot directory exists
   file:
-    path: "{{ certbot_path }}/.well-known/acme-challenge"
+    path: "{{ nginx_certbot_htdocs_path }}/.well-known/acme-challenge"
     state: directory
     recurse: yes
     owner: nginx
@@ -17,12 +17,12 @@
 
 - name: Set default SELinux context for Certbot
   command: >
-    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ certbot_path }}(/.*)?"
+    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_certbot_htdocs_path }}(/.*)?"
   sudo: yes
 
 - name: Restore default SELinux context for Certbot
   command: >
-    restorecon -rv {{ certbot_path }}
+    restorecon -rv {{ nginx_certbot_htdocs_path }}
   sudo: yes
 
 - name: LetsEncrypt auto-renew cronjob
