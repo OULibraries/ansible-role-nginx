@@ -6,7 +6,7 @@
 - include: pip.yml
   sudo: yes
 
-- include: configure.yml
+- include: configure-nginx.yml
   sudo: yes
 
 - include: ssl-selfsign-star.yml
@@ -19,6 +19,12 @@
   sudo: yes
 
 - include: ssl-selfsign-stub.yml
+  sudo: yes
+
+- include: ssl-letsencrypt.yml
+  sudo: yes
+
+- include: configure-sites.yml
   sudo: yes
 
 - include: assets.yml
