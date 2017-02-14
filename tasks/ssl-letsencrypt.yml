@@ -29,7 +29,7 @@
 - name: Make sure we have letsencrypt init configs loaded
   sudo: yes
   shell: >
-     nginx -t && systemctl reload nginx
+     nginx -t && systemctl restart nginx
 
 - name: Deploy letsencrypt certificate with certbot
   sudo: yes
