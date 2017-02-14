@@ -4,7 +4,7 @@ OULibraries.nginx
 Nginx webserver for OU Libraries. Uses official nginx stable repository.
 It only proxies the first upstream defined per site.
 
-Can deploy letsencrypt certificates for literal_sites that have the element cert_type defined and set to "letsencrypy".  Currently anything else (leaving the cert_type out, or setting it to something other than "letsencrypt" defaults to the old behavior of creating a self-signed certificate.
+Can deploy letsencrypt certificates for literal_sites that have the element cert_type defined and set to "letsencrypt".  Currently anything else (leaving the cert_type out, or setting it to something other than "letsencrypt" defaults to the old behavior of creating a self-signed certificate.
 
 Requirements
 ------------
