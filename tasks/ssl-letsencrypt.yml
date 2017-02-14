@@ -1,0 +1,53 @@
+---
+
+- name: LetsEncrypt Certbot directory exists
+  file:
+    path: "{{ nginx_certbot_htdocs_path }}/.well-known/acme-challenge"
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
+
+- name: Set default SELinux context for Certbot
+  command: >
+    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_certbot_htdocs_path }}(/.*)?"
+  sudo: yes
+
+- name: Restore default SELinux context for Certbot
+  command: >
+    restorecon -rv {{ nginx_certbot_htdocs_path }}
+  sudo: yes
+
+- name: Letsencrypt inital config
+  template:
+    src: init.letsencrypt.site.conf.j2
+    dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
+    force: no
+  with_items: "{{ nginx_literal_sites }}"
+  when: item.cert_type == "letsencrypt"
+
+- name: Make sure we have letsencrypt init configs loaded
+  sudo: yes
+  command: >
+     nginx -t && systemctl reload nginx
+
+- name: Deploy letsencrypt certificate with certbot
+  sudo: yes
+  command: >
+     certbot certonly --webroot
+     -w "{{ nginx_certbot_htdocs_path }}"
+     -d "{{ item.name }}"
+     --email "{{ nginx_certbot_email }}"
+     --agree-tos
+  args:
+    creates: "{{ nginx_letsencrypt_live_cert_path }}/{{ item.name }}/fullchain.pem"
+  with_items: nginx_literal_sites
+  when: item.cert_type == "letsencrypt"
+
+- name: LetsEncrypt auto-renew cronjob
+  copy:
+    src: letsencrypt-daily.cron
+    dest: /etc/cron.daily/letsencrypt-daily.cron
+    mode: 0744
+    owner: root
+    group: root
