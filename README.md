@@ -44,6 +44,7 @@ nginx_star_sites:
    robots: dspace
 nginx_literal_sites:
  - name: 1.example.com
+   cert_type: letsencrypt # this is optional
    upstreams:
      - name: 1-example-dev
        servers:
