@@ -24,7 +24,7 @@
     dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
     force: no
   with_items: "{{ nginx_literal_sites }}"
-  when: item.cert_type == "letsencrypt"
+  when: (item.cert_type is defined) and (item.cert_type == "letsencrypt")
 
 - name: Make sure we have letsencrypt init configs loaded
   sudo: yes
@@ -42,7 +42,7 @@
   args:
     creates: "{{ nginx_letsencrypt_live_cert_path }}/{{ item.name }}/fullchain.pem"
   with_items: nginx_literal_sites
-  when: item.cert_type == "letsencrypt"
+  when: (item.cert_type is defined) and (item.cert_type == "letsencrypt")
 
 - name: LetsEncrypt auto-renew cronjob
   copy:

@@ -26,7 +26,7 @@ server {
   server_name         {{ item.name }};
 
   ssl                 on;
-{% if item.cert_type == "letsencrypt" %}
+{% if (item.cert_type is defined) and (item.cert_type == "letsencrypt") %}
   ssl_certificate     {{ nginx_letsencrypt_live_cert_path }}/{{ item.name }}/fullchain.pem;
   ssl_certificate_key {{ nginx_letsencrypt_live_cert_path }}/{{ item.name }}/privkey.pem;
 {% else %}
