@@ -17,7 +17,7 @@ server {
   server_name         *.{{ item.name }};
 
   ssl                 on;
-  ssl_certificate     {{ nginx_cert_path }}/star.{{ item.name }}/cert.pem;
+  ssl_certificate     {{ nginx_cert_path }}/star.{{ item.name }}/fullchain.pem;
   ssl_certificate_key {{ nginx_key_path }}/star.{{ item.name }}/privkey.pem;
 
   access_log          /var/log/nginx/star.{{ item.name }}.access.log;

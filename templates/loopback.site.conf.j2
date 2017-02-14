@@ -26,7 +26,7 @@ server {
   server_name         {{ item.name }};
 
   ssl                 on;
-  ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/cert.pem;
+  ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/fullchain.pem;
   ssl_certificate_key {{ nginx_key_path }}/{{ item.name }}/privkey.pem;
 
   access_log          /var/log/nginx/{{ item.name }}.access.log;
