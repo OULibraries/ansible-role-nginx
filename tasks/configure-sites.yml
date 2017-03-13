@@ -42,4 +42,4 @@
     semanage fcontext -a -t httpd_config_t "/srv/{{ item.name }}/etc(/.*)"
     restorecon -rv "/srv/{{ item.name }}/etc/"
   with_items: "{{ nginx_stub_sites }}"
-  sudo: yes
+  become: true

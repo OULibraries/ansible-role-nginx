@@ -63,7 +63,7 @@ An example vagrant playbook.
 
 ```
 - hosts: nginx.vagrant.local
-  sudo: yes
+  become: true
   vars_files:
     - my-vars.yml
   pre_tasks:

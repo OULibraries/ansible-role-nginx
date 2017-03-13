@@ -1,39 +1,39 @@
 ---
 # tasks file for nginx
 - include: yum.yml
-  sudo: yes
+  become: true
 
 - include: pip.yml
-  sudo: yes
+  become: true
 
 - include: configure-nginx.yml
-  sudo: yes
+  become: true
 
 - include: ssl-selfsign-star.yml
-  sudo: yes
+  become: true
 
 - include: ssl-selfsign-literal.yml
-  sudo: yes
+  become: true
 
 - include: ssl-selfsign-loopback.yml
-  sudo: yes
+  become: true
 
 - include: ssl-selfsign-stub.yml
-  sudo: yes
+  become: true
 
 - include: ssl-letsencrypt.yml
-  sudo: yes
+  become: true
 
 - include: configure-sites.yml
-  sudo: yes
+  become: true
 
 - include: assets.yml
-  sudo: yes
+  become: true
   tags: assets
 
 - include: vmware.yml
   when: (ansible_virtualization_type == "VMware") and (ansible_virtualization_role == "guest")
-  sudo: yes
+  become: true
 
 - include: services.yml
-  sudo: yes
+  become: true

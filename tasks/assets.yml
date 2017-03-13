@@ -22,9 +22,9 @@
 - name: Set default SELinux context for robots
   command: >
     semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_robots_htdocs_path }}(/.*)?"
-  sudo: yes
+  become: true
 
 - name: Restore default SELinux context for robots
   command: >
     restorecon -rv {{ nginx_robots_htdocs_path }}
-  sudo: yes
+  become: true

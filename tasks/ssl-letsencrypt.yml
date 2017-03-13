@@ -11,12 +11,12 @@
 - name: Set default SELinux context for Certbot
   command: >
     semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_certbot_htdocs_path }}(/.*)?"
-  sudo: yes
+  become: true
 
 - name: Restore default SELinux context for Certbot
   command: >
     restorecon -rv {{ nginx_certbot_htdocs_path }}
-  sudo: yes
+  become: true
 
 - name: Letsencrypt inital config
   template:
@@ -27,12 +27,12 @@
   when: (item.cert_type is defined) and (item.cert_type == "letsencrypt")
 
 - name: Make sure we have letsencrypt init configs loaded
-  sudo: yes
+  become: true
   shell: >
      nginx -t && systemctl restart nginx
 
 - name: Deploy letsencrypt certificate with certbot
-  sudo: yes
+  become: true
   command: >
      certbot certonly --webroot
      -w "{{ nginx_certbot_htdocs_path }}"
