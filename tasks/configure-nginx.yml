@@ -1,5 +1,10 @@
 ---
 
+- name: Set SELinux booleans for nginx
+  command: "setsebool -P {{ item }} on"
+  with_items:
+    - httpd_setrlimit
+
 - name: Nginx cache directory exists
   file:
     path: /var/lib/nginx/cache
