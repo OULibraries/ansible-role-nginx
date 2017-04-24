@@ -4,12 +4,12 @@ nginx_cert_path: /etc/pki/tls/certs
 nginx_key_path: /etc/pki/tls/private
 nginx_letsencrypt_live_cert_path: /etc/letsencrypt/live
 nginx_certbot_htdocs_path: /srv/certbot
-nginx_certbot_email:
+nginx_certbot_email: !!null
 nginx_robots_htdocs_path: /srv/robots
 
 # Default to no local sites to maintain compatibility with existing
 # playbooks.
-nginx_stub_sites: []
-nginx_star_sites: []
-nginx_literal_sites: []
-nginx_loopback_sites: []
+nginx_stub_sites: !!null
+nginx_star_sites: !!null
+nginx_literal_sites: !!null
+nginx_loopback_sites: !!null
