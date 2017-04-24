@@ -35,12 +35,18 @@ nginx_star_sites:
 nginx_literal_sites:
  - name: 1.example.com
    cert_type: letsencrypt # this is optional
+   redirect_locations: # this is optional
+     - src: /source
+       dest: /destination
+       code: 302
    upstreams:
      - name: 1-example-dev
        servers:
          - 192.168.1.13:9443
          - 192.168.1.14:9445
          - 192.168.1.15:9955
+       locations:
+         - /
    robots: disallow
 nginx_stub_sites:
  - name: 1.example.com

@@ -56,11 +56,26 @@ server {
     alias             /srv/robots/robots.dspace.txt;
   }
 {% endif %}
+{% if (item.redirect_locations is defined) %}
+{% for redirect_location in item.redirect_locations %}
 
-  # root
-  location / {
+  # Redirect {{ redirect_location.src }} to {{ redirect_location.dest }}
+  location {{ redirect_location.src }} {
+    return {{ redirect_location.code }} {{ redirect_location.dest }};
+  }
+{% endfor %}
+{% endif %}
+{% for upstream in item.upstreams %}
+
+  # {{ upstream.name }}
+{% for location in upstream.locations %}
+
+  # {{ location }}
+  location {{ location }} {
     # Make sure we keep this nginx setting intact
     add_header        X-Content-Type-Options nosniff;
-    proxy_pass        https://{{ item.upstreams.0.name }}/;
+    proxy_pass        https://{{ upstream.name }}{{ location }};
   }
+{% endfor %}
+{% endfor %}
 }
