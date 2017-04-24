@@ -4,11 +4,13 @@
     path: "{{ nginx_cert_path }}/star.{{ item.name }}"
     state: directory
   with_items: nginx_star_sites
+
 - name: SSL star key directory exists
   file:
     path: "{{ nginx_key_path }}/star.{{ item.name }}"
     state: directory
   with_items: nginx_star_sites
+
 - name: Self-signed star cert exists.
   become: true
   command: >
