@@ -85,7 +85,7 @@ This example has a pretask that copies over static DH parameters to speed provis
 License
 -------
 
-TBD
+[MIT](https://github.com/OULibraries/ansible-role-nginx/blob/master/LICENSE)
 
 Author Information
 ------------------
