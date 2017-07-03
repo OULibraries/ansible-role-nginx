@@ -1,38 +1,10 @@
-{% for upstream in item.upstreams %}
-upstream {{ upstream.name }} {
-{% for server in upstream.servers %}
-  server             {{ server }};
-}
-{% endfor %}
-{% endfor %}
-
-server {
-  listen              80;
-  server_name         {{ item.name }};
-
-  # ACME challenge
-  location /.well-known/acme-challenge {
-    alias {{ nginx_acme_challenge_dir }}/.well-known/acme-challenge;
-  }
-
-  # root
-  location / {
-    return 301 https://$host$request_uri;
-  }
-}
-
 server {
   listen              443;
   server_name         {{ item.name }};
 
   ssl                 on;
-{% if (item.cert_type is defined) and (item.cert_type == "acme") %}
-  ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/fullchain.pem;
-  ssl_certificate_key {{ nginx_cert_path }}/{{ item.name }}/privkey.pem;
-{% else %}
   ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/fullchain.pem;
   ssl_certificate_key {{ nginx_key_path }}/{{ item.name }}/privkey.pem;
-{% endif %}
   access_log          /var/log/nginx/{{ item.name }}.access.log;
 
   # Global Proxy settings for this server_name

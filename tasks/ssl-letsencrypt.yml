@@ -1,54 +1,13 @@
 ---
 
-- name: ACME challenge directory exists
-  file:
-    path: "{{ nginx_acme_challenge_dir }}/.well-known/acme-challenge"
-    state: directory
-    recurse: yes
-    mode: 0644
-    owner: nginx
-    group: wheel
-
-- name: Set default SELinux context for ACME challenge
-  command: >
-    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_acme_challenge_dir }}(/.*)?"
-  become: true
-
-- name: Restore default SELinux context for ACME challenge
-  command: >
-    restorecon -rv {{ nginx_acme_challenge_dir }}
-  become: true
-
-- name: ACME challenge inital config
+- name: Inital site config
   template:
-    src: init.acme.site.conf.j2
+    src: init.site.conf.j2
     dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
     force: no
-  with_items: "{{ nginx_literal_sites }}"
-  when: (item.cert_type is defined) and (item.cert_type == "acme")
+  with_items: "{{ nginx_sites }}"
 
 - name: Make sure we have acme init configs loaded
   become: true
   shell: >
-     nginx -t && systemctl restart nginx
-
-- name: Deploy acme certificate with certbot
-  become: true
-  command: >
-     certbot certonly --webroot
-     -w "{{ nginx_acme_challenge_dir }}"
-     -d "{{ item.name }}"
-     --email "{{ nginx_certbot_email }}"
-     --agree-tos
-  args:
-    creates: "{{ nginx_cert_path }}/{{ item.name }}/fullchain.pem"
-  with_items: nginx_literal_sites
-  when: (item.cert_type is defined) and (item.cert_type == "acme")
-
-- name: LetsEncrypt auto-renew cronjob
-  copy:
-    src: acme-daily.cron
-    dest: /etc/cron.daily/acme-daily.cron
-    mode: 0744
-    owner: root
-    group: root
+     nginx -t && systemctl reload nginx

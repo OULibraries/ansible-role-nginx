@@ -1,0 +1,25 @@
+{% for upstream in item.upstreams %}
+upstream {{ upstream.name }} {
+{% for server in upstream.servers %}
+  server             {{ server }};
+}
+{% endfor %}
+{% endfor %}
+
+server {
+  listen              80;
+  server_name         {{ item.name }};
+
+  # ACME challenge
+  location /.well-known/acme-challenge {
+    alias {{ nginx_acme_challenge_dir }}/.well-known/acme-challenge;
+  }
+
+  # root
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+
+# Per site include that contains the actual config
+include /etc/nginx/includes/{{ item.name }}.d/*.conf;

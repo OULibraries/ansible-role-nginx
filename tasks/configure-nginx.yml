@@ -25,3 +25,65 @@
     mode: 0644
     owner: root
     group: wheel
+
+- name: Includes directory exists
+  file:
+    path: /etc/nginx/includes
+    state: directory
+    recurse: yes
+    mode: 0755
+    owner: nginx
+    group: wheel
+
+- name: Set SELinux context for includes directory
+  shell: |
+    semanage fcontext -a -t httpd_config_t "/etc/nginx/includes(/.*)"
+    restorecon -rv "/etc/nginx/includes"
+
+- name: ACME challenge directory exists
+  file:
+    path: "{{ nginx_acme_challenge_dir }}/.well-known/acme-challenge"
+    state: directory
+    recurse: yes
+    mode: 0755
+    owner: nginx
+    group: wheel
+
+- name: Set default SELinux context for ACME challenge
+  command: >
+    semanage fcontext -a -t httpd_sys_rw_content_t  "{{ nginx_acme_challenge_dir }}(/.*)?"
+
+- name: Restore default SELinux context for ACME challenge
+  command: >
+    restorecon -rv {{ nginx_acme_challenge_dir }}
+
+- name: Base site configs exist
+  template:
+    src: base.site.conf.j2
+    dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
+    force: no
+    mode: 0644
+    owner: nginx
+    group: wheel
+  with_items: "{{ nginx_sites }}"
+  when: ((nginx_sites is defined) and (nginx_sites is not none))
+
+- name: Base site configs are loaded
+  become: true
+  shell: >
+     nginx -t && systemctl reload nginx
+
+# TODO need narrower when clause
+# certs should exist on box already
+# need to add a check for template or local lookup as
+# source of config.
+- name: Included configs exist
+  template:
+    src: include.site.conf.j2
+    dest: "/etc/nginx/include/{{ item.name }}.d/site.conf"
+    force: no
+    mode: 0644
+    owner: nginx
+    group: wheel
+  with_items: "{{ nginx_sites }}"
+  when: ((nginx_sites is defined) and (nginx_sites is not none))
