@@ -2,22 +2,19 @@ OULibraries.nginx
 =========
 
 Nginx webserver for OU Libraries. Uses official nginx stable repository.
-It only proxies the first upstream defined per site.
-
-Can deploy acme certificates for literal_sites that have the element cert_type defined and set to "acme".  Currently anything else (leaving the cert_type out, or setting it to something other than "acme" defaults to the old behavior of creating a self-signed certificate.
 
 Requirements
 ------------
 
-CentOS 7x
-
+* CentOS 7.x
+* ansible >= 2.2
 
 Role Variables
 --------------
 
 You'll need to define hostnames, backend servers, and an optional robots.txt overlay, eg.
 ```
-nginx_star_sites:
+nginx_sites:
  - name: example.com
    upstreams:
      - name: example-dev
@@ -32,9 +29,7 @@ nginx_star_sites:
        servers:
          - 192.168.1.13:8443
    robots: dspace
-nginx_literal_sites:
  - name: 1.example.com
-   cert_type: acme # this is optional
    redirect_locations: # this is optional
      - src: /source
        dest: /destination
@@ -48,14 +43,12 @@ nginx_literal_sites:
        locations:
          - /
    robots: disallow
-nginx_stub_sites:
  - name: 1.example.com
-   robots: disallow
+   include: No # this is optional. Will deploy just enough server to respond to acme challenges and redirect http -> https. Server config for https is up to somebody else.
+   cert_name: example.com # this is optional. use if this site name is configured as a SAN for a certificate named after another site.
 ```
 
 All backends must use SSL regardless of port.
-
-Any name you enter for a star site will be configured with `*.` in front of it.
 
 See defaults/main.yml for the rest
 
@@ -85,7 +78,7 @@ This example has a pretask that copies over static DH parameters to speed provis
 License
 -------
 
-[MIT](https://github.com/OULibraries/ansible-role-nginx/blob/master/LICENSE)
+[MIT](LICENSE)
 
 Author Information
 ------------------
