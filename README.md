@@ -3,7 +3,7 @@ OULibraries.nginx
 
 Nginx webserver for OU Libraries. Uses official nginx stable repository.
 
-You probably want to use this in conjuction [OULibraries.tls-cert](https://github.com/OULibraries/ansible-role-tls-cert)
+You probably want to use this in conjuction with [OULibraries.tls-cert](https://github.com/OULibraries/ansible-role-tls-cert)
 
 Requirements
 ------------
