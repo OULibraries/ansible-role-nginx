@@ -18,6 +18,14 @@
     chdir: "{{ nginx_cert_path }}"
     creates: "{{ nginx_cert_path }}/dhparam.pem"
 
+- name: Diffie Hellman ephemeral parameters permissions
+  file:
+    path: "{{ nginx_cert_path }}/dhparam.pem"
+    state: present
+    mode: 0640
+    owner: nginx
+    group: wheel
+
 - name: Nginx Config
   template:
     src: nginx.conf.j2
@@ -45,7 +53,7 @@
     path: "{{ nginx_acme_challenge_dir }}/.well-known/acme-challenge"
     state: directory
     recurse: yes
-    mode: 0755
+    mode: 2775
     owner: nginx
     group: wheel
 

@@ -3,6 +3,8 @@ OULibraries.nginx
 
 Nginx webserver for OU Libraries. Uses official nginx stable repository.
 
+You probably want to use this in conjuction [OULibraries.tls-cert](https://github.com/OULibraries/ansible-role-tls-cert)
+
 Requirements
 ------------
 
@@ -61,10 +63,13 @@ Example Playbook
 An example vagrant playbook.
 
 ```
+- hosts: localhost
+  roles:
+    - OULibraries.tls-cert
+
 - hosts: nginx.vagrant.local
   become: true
   vars_files:
-    - my-vars.yml
   pre_tasks:
     - copy:
         src: /vagrant/dhparam.pem
