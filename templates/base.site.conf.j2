@@ -1,4 +1,4 @@
-{% for upstream in item.upstreams %}
+{% for upstream in nginx_site.upstreams %}
 upstream {{ upstream.name }} {
 {% for server in upstream.servers %}
   server             {{ server }};
@@ -8,7 +8,7 @@ upstream {{ upstream.name }} {
 
 server {
   listen              80;
-  server_name         {{ item.name }};
+  server_name         {{ nginx_site.name }};
 
   # ACME challenge
   location /.well-known/acme-challenge {
@@ -22,4 +22,4 @@ server {
 }
 
 # Per site include that contains the actual config
-include /etc/nginx/includes/{{ item.name }}.d/*.conf;
+include /etc/nginx/includes/{{ nginx_site.name }}.d/*.conf;

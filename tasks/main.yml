@@ -3,13 +3,20 @@
 
 - include: yum.yml
   become: true
+  tags:
+    - nginx_yum
 
 - include: configure.yml
   become: true
+  tags:
+    - nginx_configure
 
 - include: assets.yml
   become: true
-  tags: assets
+  tags:
+    - nginx_assets
 
 - include: services.yml
   become: true
+  tags:
+    - nginx_services

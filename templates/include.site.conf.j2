@@ -1,11 +1,11 @@
 server {
   listen              443;
-  server_name         {{ item.name }};
+  server_name         {{ nginx_site.name }};
 
   ssl                 on;
-  ssl_certificate     {{ nginx_cert_path }}/{{ item.name }}/fullchain.pem;
-  ssl_certificate_key {{ nginx_key_path }}/{{ item.name }}/privkey.pem;
-  access_log          /var/log/nginx/{{ item.name }}.access.log;
+  ssl_certificate     {{ nginx_cert_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/fullchain.pem;
+  ssl_certificate_key {{ nginx_key_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/privkey.pem;
+  access_log          /var/log/nginx/{{ nginx_site.name }}.access.log;
 
   # Global Proxy settings for this server_name
   proxy_set_header    Host $host;
@@ -17,19 +17,19 @@ server {
   proxy_cache_revalidate  on;
   proxy_cache cache;
 
-{% if item.robots == "disallow" %}
+{% if nginx_site.robots == "disallow" %}
   # robots.txt overlay
   location =/robots.txt {
     alias             /srv/robots/robots.disallow.txt;
   }
-{% elif item.robots == "dspace" %}
+{% elif nginx_site.robots == "dspace" %}
   # robots.txt overlay
   location =/robots.txt {
     alias             /srv/robots/robots.dspace.txt;
   }
 {% endif %}
-{% if (item.redirect_locations is defined) %}
-{% for redirect_location in item.redirect_locations %}
+{% if (nginx_site.redirect_locations is defined) %}
+{% for redirect_location in nginx_site.redirect_locations %}
 
   # Redirect {{ redirect_location.src }} to {{ redirect_location.dest }}
   location {{ redirect_location.src }} {
@@ -37,7 +37,7 @@ server {
   }
 {% endfor %}
 {% endif %}
-{% for upstream in item.upstreams %}
+{% for upstream in nginx_site.upstreams %}
 
   # {{ upstream.name }}
 {% for location in upstream.locations %}

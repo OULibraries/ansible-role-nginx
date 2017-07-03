@@ -57,33 +57,12 @@
   command: >
     restorecon -rv {{ nginx_acme_challenge_dir }}
 
-- name: Base site configs exist
-  template:
-    src: base.site.conf.j2
-    dest: "/etc/nginx/conf.d/{{ item.name }}.conf"
-    force: no
-    mode: 0644
-    owner: nginx
-    group: wheel
-  with_items: "{{ nginx_sites }}"
-  when: ((nginx_sites is defined) and (nginx_sites is not none))
-
-- name: Base site configs are loaded
-  become: true
-  shell: >
-     nginx -t && systemctl reload nginx
-
-# TODO need narrower when clause
-# certs should exist on box already
-# need to add a check for template or local lookup as
-# source of config.
-- name: Included configs exist
-  template:
-    src: include.site.conf.j2
-    dest: "/etc/nginx/include/{{ item.name }}.d/site.conf"
-    force: no
-    mode: 0644
-    owner: nginx
-    group: wheel
-  with_items: "{{ nginx_sites }}"
+- include: configure-sites.yml
+  with_items:
+    - "{{ nginx_sites }}"
+  loop_control:
+    loop_var: nginx_site
+  tags:
+  - nginx_configure
+  - nginx_configure_sites
   when: ((nginx_sites is defined) and (nginx_sites is not none))

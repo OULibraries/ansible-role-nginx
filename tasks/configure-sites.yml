@@ -1,0 +1,46 @@
+---
+
+- name: Base site config exists
+  template:
+    src: base.site.conf.j2
+    dest: "/etc/nginx/conf.d/{{ nginx_site.name }}.conf"
+    mode: 0644
+    owner: nginx
+    group: wheel
+
+- name: Base site config is loaded
+  shell: >
+     nginx -t && systemctl reload nginx
+
+- name: Check for site privkey
+  stat:
+    path: "{{ nginx_cert_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/cert.pem"
+  register: nginx_privkeystat
+
+- name: Check for site certificate full chain
+  stat:
+    path: "{{ nginx_cert_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/fullchain.pem"
+  register: nginx_fullchainstat
+
+- name: Includes directory exists
+  file:
+    path: "/etc/nginx/includes/{{ nginx_site.name }}.d"
+    state: directory
+    recurse: yes
+    mode: 0755
+    owner: nginx
+    group: wheel
+  when: nginx_site.include_config and nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists
+
+- name: Included site config conditionally exists.
+  template:
+    src: include.site.conf.j2
+    dest: "/etc/nginx/include/{{ nginx_site.name }}.d/site.conf"
+    mode: 0644
+    owner: nginx
+    group: wheel
+  when: (nginx_site.include is undefined or nginx_site.include is none or not nginx_site.include) and (nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists)
+
+- name: Included site config is loaded
+  shell: >
+     nginx -t && systemctl reload nginx
