@@ -7,7 +7,4 @@ nginx_robots_htdocs_path: /srv/robots
 
 # Default to no local sites to maintain compatibility with existing
 # playbooks.
-nginx_stub_sites: !!null
-nginx_star_sites: !!null
-nginx_literal_sites: !!null
-nginx_loopback_sites: !!null
+nginx_sites: !!null
