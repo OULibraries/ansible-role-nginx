@@ -9,26 +9,6 @@
 - include: configure-nginx.yml
   become: true
 
-- include: ssl-selfsign-star.yml
-  when: ((nginx_star_sites is defined) and (nginx_star_sites is not none))
-  become: true
-
-- include: ssl-selfsign-literal.yml
-  when: ((nginx_literal_sites is defined) and (nginx_literal_sites is not none))
-  become: true
-
-- include: ssl-selfsign-loopback.yml
-  when: ((nginx_loopback_sites is defined) and (nginx_loopback_sites is not none))
-  become: true
-
-- include: ssl-selfsign-stub.yml
-  when: ((nginx_stub_sites is defined) and (nginx_stub_sites is not none))
-  become: true
-
-- include: ssl-letsencrypt.yml
-  when: ((nginx_certbot_email is defined) and (nginx_certbot_email is not none))
-  become: true
-
 - include: configure-sites.yml
   become: true
 

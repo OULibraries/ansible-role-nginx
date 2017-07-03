@@ -1,13 +1,14 @@
-# Letsencrypt bootstrap config.  This is just enough to create a certificate.
+# ACME challenge bootstrap config.
+#  This is just enough to respond to a challenge.
 # Should get replaced by the end of a site deployment.
 
 server {
   listen              80;
   server_name         {{ item.name }};
 
-  # Let's Encrypt CertBot
+  # ACME challenge
   location /.well-known/acme-challenge {
-    alias {{ nginx_certbot_htdocs_path }}/.well-known/acme-challenge;
+    alias {{ nginx_acme_challenge_dir }}/.well-known/acme-challenge;
   }
 
   # root

@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-# Certbot renewal
-/usr/bin/certbot renew --text --config-dir /etc/letsencrypt
-
-# Reload with any new certs
-nginx -t && systemctl reload nginx

@@ -2,9 +2,7 @@
 # defaults file for nginx
 nginx_cert_path: /etc/pki/tls/certs
 nginx_key_path: /etc/pki/tls/private
-nginx_letsencrypt_live_cert_path: /etc/letsencrypt/live
-nginx_certbot_htdocs_path: /srv/certbot
-nginx_certbot_email: !!null
+nginx_acme_challenge_dir: /srv/certbot
 nginx_robots_htdocs_path: /srv/robots
 
 # Default to no local sites to maintain compatibility with existing
