@@ -21,7 +21,7 @@
 - name: Diffie Hellman ephemeral parameters permissions
   file:
     path: "{{ nginx_cert_path }}/dhparam.pem"
-    state: present
+    state: file
     mode: 0640
     owner: nginx
     group: wheel
