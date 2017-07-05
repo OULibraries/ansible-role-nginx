@@ -1,4 +1,5 @@
 ---
+
 - name: Ensure robots directory exists
   file:
     path: "{{ nginx_robots_htdocs_path }}"
@@ -28,3 +29,13 @@
   command: >
     restorecon -rv {{ nginx_robots_htdocs_path }}
   become: true
+
+- include: assets-sites.yml
+  with_items:
+    - "{{ nginx_sites }}"
+  loop_control:
+    loop_var: nginx_site
+  tags:
+  - nginx_assets
+  - nginx_assets_sites
+  when: ((nginx_sites is defined) and (nginx_sites is not none))
