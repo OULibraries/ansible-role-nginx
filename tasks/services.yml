@@ -1,4 +1,4 @@
-- name: Run nginx on boot
+- name: Nginx restarted
   service:
     name: nginx
     state: restarted

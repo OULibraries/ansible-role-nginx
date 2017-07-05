@@ -65,6 +65,12 @@
   command: >
     restorecon -rv {{ nginx_acme_challenge_dir }}
 
+- name: Run nginx on boot
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
 - include: configure-sites.yml
   with_items:
     - "{{ nginx_sites }}"
