@@ -6,15 +6,15 @@
   tags:
     - nginx_yum
 
-- include: configure.yml
-  become: true
-  tags:
-    - nginx_configure
-
 - include: assets.yml
   become: true
   tags:
     - nginx_assets
+
+- include: configure.yml
+  become: true
+  tags:
+    - nginx_configure
 
 - include: services.yml
   become: true
