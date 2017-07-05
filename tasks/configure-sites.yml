@@ -24,7 +24,7 @@
 
 - name: Includes directory exists
   file:
-    path: "/etc/nginx/includes/{{ nginx_site.name }}.d"
+    path: "/etc/nginx/include/{{ nginx_site.name }}.d"
     state: directory
     recurse: yes
     mode: 0755

@@ -36,7 +36,7 @@
 
 - name: Includes directory exists
   file:
-    path: /etc/nginx/includes
+    path: /etc/nginx/include
     state: directory
     recurse: yes
     mode: 0755
@@ -45,8 +45,8 @@
 
 - name: Set SELinux context for includes directory
   shell: |
-    semanage fcontext -a -t httpd_config_t "/etc/nginx/includes(/.*)"
-    restorecon -rv "/etc/nginx/includes"
+    semanage fcontext -a -t httpd_config_t "/etc/nginx/include(/.*)"
+    restorecon -rv "/etc/nginx/include"
 
 - name: ACME challenge directory exists
   file:
