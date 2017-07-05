@@ -8,3 +8,6 @@ nginx_robots_htdocs_path: /srv/robots
 # Default to no local sites to maintain compatibility with existing
 # playbooks.
 nginx_sites: !!null
+
+# Location on control machine to source key material
+tls_cert_path: "{{ role_path }}/../../tls_certs"
