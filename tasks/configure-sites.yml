@@ -14,7 +14,7 @@
 
 - name: Check for site privkey
   stat:
-    path: "{{ nginx_cert_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/privkey.pem"
+    path: "{{ nginx_key_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/privkey.pem"
   register: nginx_privkeystat
 
 - name: Check for site certificate full chain
