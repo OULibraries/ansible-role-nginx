@@ -52,7 +52,7 @@ http {
 
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     ssl_prefer_server_ciphers on;
-    ssl_dhparam {{ nginx_cert_path }}/dhparam.pem;
+    ssl_dhparam {{ nginx_key_path }}/dhparam.pem;
 
     add_header Strict-Transport-Security max-age=63072000;
     add_header X-Content-Type-Options nosniff;
