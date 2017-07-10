@@ -18,6 +18,12 @@
     owner: nginx
     group: wheel
 
+- name: Conditionally set SELinux context for app_include
+  shell: |
+    semanage fcontext -a -t httpd_config_t "/srv/{{ nginx_site.app_include }}/etc(/.*)"
+    restorecon -rv "/srv/{{ nginx_site.app_include }}/etc"
+  when: (nginx_site.app_include|default(false))
+
 - name: Site config is loaded
   shell: >
      nginx -t && systemctl reload nginx

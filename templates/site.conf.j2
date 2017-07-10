@@ -45,8 +45,8 @@ server {
   proxy_cache cache;
 
 {% if nginx_site.app_include|default(false) %}
-  # Application provided config for /srv/{{ nginx_site.name }}
-  include "/srv/{{ nginx_site.name }}/etc/nginx.conf";
+  # Application provided config for /srv/{{ nginx_site.app_include }}
+  include "/srv/{{ nginx_site.app_include }}/etc/nginx.conf";
 {% endif %}
 
 {% if (nginx_site.robots is defined) %}
