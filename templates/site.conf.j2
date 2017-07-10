@@ -1,3 +1,29 @@
+{% if nginx_site.upstreams is defined %}
+{% for upstream in nginx_site.upstreams %}
+upstream {{ upstream.name }} {
+{% for server in upstream.servers %}
+  server             {{ server }};
+}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+server {
+  listen              80;
+  server_name         {{ nginx_site.name }};
+
+  # ACME challenge
+  location /.well-known/acme-challenge {
+    alias {{ nginx_acme_challenge_dir }}/.well-known/acme-challenge;
+  }
+
+  # root
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+
+{% if nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists %}
 server {
   listen              443;
   server_name         {{ nginx_site.name }};
@@ -6,6 +32,7 @@ server {
   ssl_certificate     {{ nginx_cert_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/fullchain.pem;
   ssl_certificate_key {{ nginx_key_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/privkey.pem;
   access_log          /var/log/nginx/{{ nginx_site.name }}.access.log;
+  error_log          /var/log/nginx/{{ nginx_site.name }}.error.log;
 
   # Global Proxy settings for this server_name
   proxy_set_header    Host $host;
@@ -16,6 +43,11 @@ server {
   proxy_cache_bypass $no_cache $http_cache_control;
   proxy_cache_revalidate  on;
   proxy_cache cache;
+
+{% if nginx_site.app_include|default(false) %}
+  # Application provided config for /srv/{{ nginx_site.name }}
+  include /srv/{{ nginx_site.name }}/etc/*.nginx.conf;
+{% endif %}
 
 {% if nginx_site.robots == "disallow" %}
   # robots.txt overlay
@@ -37,6 +69,7 @@ server {
   }
 {% endfor %}
 {% endif %}
+{% if nginx_site.upstreams is defined %}
 {% for upstream in nginx_site.upstreams %}
 
   # {{ upstream.name }}
@@ -50,4 +83,6 @@ server {
   }
 {% endfor %}
 {% endfor %}
+{% endif %}
 }
+{% endif %}

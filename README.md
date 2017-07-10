@@ -46,11 +46,13 @@ nginx_sites:
          - /
    robots: disallow
  - name: 1.example.com
-   include: No # this is optional. Will deploy just enough server to respond to acme challenges and redirect http -> https. Server config for https is up to somebody else.
+   app_include: Yes # this is optional. Will add an an optional include directive
    cert_name: example.com # this is optional. use if this site name is configured as a SAN for a certificate named after another site.
 ```
 
-All backends must use SSL regardless of port.
+All upstreams must use SSL regardless of port.
+If the specified SSL certificates don't exist, only the port 80 config will get written.
+This prevents the whole webserver from being unable to start due to operator error.
 
 See defaults/main.yml for the rest
 

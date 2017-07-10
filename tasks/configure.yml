@@ -20,20 +20,6 @@
     owner: root
     group: wheel
 
-- name: Includes directory exists
-  file:
-    path: /etc/nginx/include
-    state: directory
-    recurse: yes
-    mode: 0755
-    owner: nginx
-    group: wheel
-
-- name: Set SELinux context for includes directory
-  shell: |
-    semanage fcontext -a -t httpd_config_t "/etc/nginx/include(/.*)"
-    restorecon -rv "/etc/nginx/include"
-
 - name: ACME challenge directory exists
   file:
     path: "{{ nginx_acme_challenge_dir }}/.well-known/acme-challenge"
