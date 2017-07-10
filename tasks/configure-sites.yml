@@ -30,7 +30,7 @@
     mode: 0755
     owner: nginx
     group: wheel
-  when: (nginx_site.include is undefined or nginx_site.include is none or not nginx_site.include) and (nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists)
+  when: (nginx_site.include|default(true)) and (nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists)
 
 - name: Included site config conditionally exists.
   template:
@@ -39,7 +39,7 @@
     mode: 0644
     owner: nginx
     group: wheel
-  when: (nginx_site.include is undefined or nginx_site.include is none or not nginx_site.include) and (nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists)
+  when: (nginx_site.include|default(true)) and (nginx_privkeystat.stat.exists and nginx_fullchainstat.stat.exists)
 
 - name: Included site config is loaded
   shell: >
