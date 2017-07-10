@@ -46,7 +46,7 @@ server {
 
 {% if nginx_site.app_include|default(false) %}
   # Application provided config for /srv/{{ nginx_site.name }}
-  include /srv/{{ nginx_site.name }}/etc/*.nginx.conf;
+  include "/srv/{{ nginx_site.name }}/etc/nginx.conf";
 {% endif %}
 
 {% if (nginx_site.robots is defined) %}
