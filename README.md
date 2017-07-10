@@ -24,7 +24,7 @@ nginx_sites:
          - 192.168.1.10:443
          - 192.168.1.11:443
          - 192.168.1.12:443
-   robots: disallow
+   robots: disallow # This is optional. Overlay robots.txt at the nginx level.
  - name: dspace.example.com
    upstreams:
      - name: dspace-dev

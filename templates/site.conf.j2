@@ -49,6 +49,7 @@ server {
   include /srv/{{ nginx_site.name }}/etc/*.nginx.conf;
 {% endif %}
 
+{% if (nginx_site.robots is defined) %}
 {% if nginx_site.robots == "disallow" %}
   # robots.txt overlay
   location =/robots.txt {
@@ -59,6 +60,7 @@ server {
   location =/robots.txt {
     alias             /srv/robots/robots.dspace.txt;
   }
+{% endif %}
 {% endif %}
 {% if (nginx_site.redirect_locations is defined) %}
 {% for redirect_location in nginx_site.redirect_locations %}
