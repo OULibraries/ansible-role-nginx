@@ -43,22 +43,33 @@ server {
   proxy_cache_bypass $no_cache $http_cache_control;
   proxy_cache_revalidate  on;
   proxy_cache cache;
-
 {% if nginx_site.app_include|default(false) %}
+
   # Application provided config for /srv/{{ nginx_site.app_include }}
   include "/srv/{{ nginx_site.app_include }}/etc/nginx.conf";
 {% endif %}
-
 {% if (nginx_site.robots is defined) %}
 {% if nginx_site.robots == "disallow" %}
+
   # robots.txt overlay
   location =/robots.txt {
     alias             /srv/robots/robots.disallow.txt;
   }
 {% elif nginx_site.robots == "dspace" %}
-  # robots.txt overlay
+
+  # dspace robots.txt overlay
   location =/robots.txt {
     alias             /srv/robots/robots.dspace.txt;
+  }
+{% endif %}
+{% endif %}
+{% if (nginx_site.app_config is defined) %}
+{% if nginx_site.app_config == "dspace" %}
+
+  # Temporarily disable part of dspace API because of DS-3250
+  # https://jira.duraspace.org/browse/DS-3250
+  location /rest/api/items/find-by-metadata-field {
+    return 403;
   }
 {% endif %}
 {% endif %}
@@ -71,25 +82,13 @@ server {
   }
 {% endfor %}
 {% endif %}
-
-{% if (nginx_site.app_config is defined) %}
-{% if nginx_site.app_config == "dspace" %}
-  # Temporarily disable part of API because of DS-3250
-  # https://jira.duraspace.org/browse/DS-3250
-  location /rest/api/items/find-by-metadata-field {
-    return 403;
-  }
-{% endif %}
-{% endif %}
-
 {% if nginx_site.upstreams is defined %}
 {% for upstream in nginx_site.upstreams %}
 
   # {{ upstream.name }}
-
 {% if (nginx_site.app_config is defined) %}
 {% if nginx_site.app_config == "dspace" %}
-  # Dspace leaks cookies, which we have to squash to cache theme assets
+  # dspace leaks cookies, which we have to squash to cache theme assets
   location ~* ^(/themes/)|(/static/).+\.(jpg|jpeg|gif|png|bmp|ico|css|js)$ {
 
     # Mitigate Major DSpace security vulnerability affecting all XMLUI sites
@@ -101,18 +100,17 @@ server {
 
     ## Make sure we keep this nginx setting intact
     add_header X-Content-Type-Options nosniff;
-    proxy_pass          http{% if nginx_site.secure|default(true) %}s{% endif %}://{{ upstream.name }};
+    proxy_pass          http{% if upstream.secure|default(true) %}s{% endif %}://{{ upstream.name }};
   }
 {% endif %}
 {% endif %}
-
 {% for location in upstream.locations %}
 
   # {{ location }}
   location {{ location }} {
     # Make sure we keep this nginx setting intact
     add_header        X-Content-Type-Options nosniff;
-    proxy_pass        http{% if nginx_site.secure|default(true) %}s{% endif %}://{{ upstream.name }}{{ location }};
+    proxy_pass        http{% if upstream.secure|default(true) %}s{% endif %}://{{ upstream.name }}{{ location }};
   }
 {% endfor %}
 {% endfor %}
