@@ -111,7 +111,7 @@ server {
     # Make sure we keep this nginx setting intact
     add_header        X-Content-Type-Options nosniff;
 {% if location.extras|default(false) %}
-{% for extra in extras %}
+{% for extra in location.extras %}
     {{ extra.name }} {{ extra.value }};
 {% endfor %}
 {% endif %}
