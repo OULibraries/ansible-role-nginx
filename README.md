@@ -32,8 +32,8 @@ nginx_sites:
          - 192.168.1.13:8443
    robots: dspace
  - name: 1.example.com
-   redirect_locations: # this is optional
-     - src: /source
+   redirects: # this is optional
+     - location_match: /source
        dest: /destination
        code: 302
    upstreams:
@@ -43,7 +43,11 @@ nginx_sites:
          - 192.168.1.14:9445
          - 192.168.1.15:9955
        locations:
-         - /
+         - location_match: /
+           extras: # this is optional. add arbitrary directives to this location block.
+             - name: client_max_body_size 
+               value: 1024M
+
    robots: disallow
  - name: 1.example.com
    app_include: Yes # this is optional. Will add an an optional include directive

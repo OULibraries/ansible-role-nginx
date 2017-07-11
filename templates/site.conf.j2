@@ -73,12 +73,12 @@ server {
   }
 {% endif %}
 {% endif %}
-{% if (nginx_site.redirect_locations is defined) %}
-{% for redirect_location in nginx_site.redirect_locations %}
+{% if (nginx_site.redirects is defined) %}
+{% for redirect in nginx_site.redirects %}
 
-  # Redirect {{ redirect_location.src }} to {{ redirect_location.dest }}
-  location {{ redirect_location.src }} {
-    return {{ redirect_location.code }} {{ redirect_location.dest }};
+  # Redirect {{ redirect.location_match }} to {{ redirect.dest }}
+  location {{ redirect.location_match }} {
+    return {{ redirect.code }} {{ redirect.dest }};
   }
 {% endfor %}
 {% endif %}
@@ -106,11 +106,16 @@ server {
 {% endif %}
 {% for location in upstream.locations %}
 
-  # {{ location }}
-  location {{ location }} {
+  # {{ location.location_match }}
+  location {{ location.location_match }} {
     # Make sure we keep this nginx setting intact
     add_header        X-Content-Type-Options nosniff;
-    proxy_pass        http{% if upstream.secure|default(true) %}s{% endif %}://{{ upstream.name }}{{ location }};
+{% if location.extras|default(false) %}
+{% for extra in extras %}
+    {{ extra.name }} {{ extra.value }};
+{% endfor %}
+{% endif %}
+    proxy_pass        http{% if upstream.secure|default(true) %}s{% endif %}://{{ upstream.name }}{{ location.proxy_path|default(location.location_match) }};
   }
 {% endfor %}
 {% endfor %}
