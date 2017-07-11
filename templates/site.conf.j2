@@ -71,17 +71,48 @@ server {
   }
 {% endfor %}
 {% endif %}
+
+{% if (nginx_site.app_config is defined) %}
+{% if nginx_site.app_config == "dspace" %}
+  # Temporarily disable part of API because of DS-3250
+  # https://jira.duraspace.org/browse/DS-3250
+  location /rest/api/items/find-by-metadata-field {
+    return 403;
+  }
+{% endif %}
+{% endif %}
+
 {% if nginx_site.upstreams is defined %}
 {% for upstream in nginx_site.upstreams %}
 
   # {{ upstream.name }}
+
+{% if (nginx_site.app_config is defined) %}
+{% if nginx_site.app_config == "dspace" %}
+  # Dspace leaks cookies, which we have to squash to cache theme assets
+  location ~* ^(/themes/)|(/static/).+\.(jpg|jpeg|gif|png|bmp|ico|css|js)$ {
+
+    # Mitigate Major DSpace security vulnerability affecting all XMLUI sites
+    rewrite ^/+themes/.*:.*$ /error permanent;
+
+    ## Plug the cookie leak
+    proxy_ignore_headers "Set-Cookie";
+    proxy_hide_header "Set-Cookie";
+
+    ## Make sure we keep this nginx setting intact
+    add_header X-Content-Type-Options nosniff;
+    proxy_pass          http{% if nginx_site.secure|default(true) %}s{% endif %}://{{ upstream.name }};
+  }
+{% endif %}
+{% endif %}
+
 {% for location in upstream.locations %}
 
   # {{ location }}
   location {{ location }} {
     # Make sure we keep this nginx setting intact
     add_header        X-Content-Type-Options nosniff;
-    proxy_pass        https://{{ upstream.name }}{{ location }};
+    proxy_pass        http{% if nginx_site.secure|default(true) %}s{% endif %}://{{ upstream.name }}{{ location }};
   }
 {% endfor %}
 {% endfor %}
