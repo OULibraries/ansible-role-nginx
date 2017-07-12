@@ -61,6 +61,12 @@ server {
   location =/robots.txt {
     alias             /srv/robots/robots.dspace.txt;
   }
+{% elif nginx_site.robots == "repox" %}
+
+  # dspace robots.txt overlay
+  location =/robots.txt {
+    alias             /srv/robots/robots.repox.txt;
+  }
 {% endif %}
 {% endif %}
 {% if (nginx_site.app_config is defined) %}

@@ -19,6 +19,7 @@
   with_items:
     - robots.dissallow.txt
     - robots.dspace.txt
+    - robots.repox.txt
 
 - name: Push Diffie Hellman ephemeral parameters
   copy:
