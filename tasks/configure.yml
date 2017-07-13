@@ -4,6 +4,7 @@
   command: "setsebool -P {{ item }} on"
   with_items:
     - httpd_setrlimit
+    - httpd_can_network_connect
 
 - name: Nginx cache directory exists
   file:
