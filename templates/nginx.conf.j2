@@ -60,7 +60,7 @@ http {
     ## General per-client limits
     limit_conn_zone $binary_remote_addr zone=addr:10m;
     limit_req_zone  $binary_remote_addr zone=addr_rate:10m rate=30r/s;
-    limit_conn addr 12;
+    limit_conn addr 60;
     limit_req  zone=addr_rate burst=128 nodelay;
 
     ## Let us upload reasonably large files.
