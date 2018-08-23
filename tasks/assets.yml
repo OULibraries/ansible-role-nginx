@@ -17,7 +17,7 @@
     owner: root
     group: wheel
   with_items:
-    - robots.dissallow.txt
+    - robots.disallow.txt
     - robots.dspace.txt
     - robots.repox.txt
 
