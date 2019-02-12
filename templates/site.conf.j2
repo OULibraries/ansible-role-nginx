@@ -31,7 +31,7 @@ server {
   ssl                 on;
   ssl_certificate     {{ nginx_cert_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/fullchain.pem;
   ssl_certificate_key {{ nginx_key_path }}/{{ nginx_site.cert_name | default(nginx_site.name) }}/privkey.pem;
-  access_log          /var/log/nginx/{{ nginx_site.name }}.access.log;
+  access_log          /var/log/nginx/{{ nginx_site.name }}.access.log main;
   error_log          /var/log/nginx/{{ nginx_site.name }}.error.log;
 
   # Global Proxy settings for this server_name
