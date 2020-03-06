@@ -25,7 +25,6 @@
   file:
     path: "{{ nginx_acme_challenge_dir }}/.well-known/acme-challenge"
     state: directory
-    recurse: yes
     mode: 0775
     owner: nginx
     group: wheel
