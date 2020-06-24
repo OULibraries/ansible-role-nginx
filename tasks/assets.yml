@@ -46,10 +46,10 @@
 - name: Add all active certs to list of certs
   set_fact:
     nginx_certs: "{{ nginx_certs + [ item.cert_name ] }}"
-  loop: "{{nginx_sites}}"
+  loop: "{{ nginx_sites }}"
 
 - debug:
-    msg: "{{ nginx_certs |unique }}"
+        msg: "'Processing the following unique certificates:'{{ nginx_certs |unique }}"
 
 # Deploy certs based on our list of active certs
 - include: assets-certs.yml
