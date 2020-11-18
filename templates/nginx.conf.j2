@@ -65,6 +65,9 @@ http {
     ## Let us upload reasonably large files.
     client_max_body_size 64M;
 
+    ## Set higher limit to account for cookies set in .ou.edu domain
+    large_client_header_buffers 4 16k;
+
     index   index.html index.htm;
 
     ## No reason to tell the world what we've got in our back pocket.
