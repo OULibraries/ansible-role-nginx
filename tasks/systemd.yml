@@ -1,0 +1,18 @@
+---
+
+- name: Copy custom systemd service file for nginx
+  template:
+    src: nginx.service.j2
+    dest: /usr/lib/systemd/system/nginx.service
+    mode: 0644
+    owner: root
+    group: root
+    
+- name: Set SELinux context for nginx.service
+  shell: |
+    semanage fcontext -a -t httpd_unit_file_t "/usr/lib/systemd/system/nginx.service"
+    restorecon -rv "/usr/lib/systemd/system/nginx.service"
+
+- name: Test nginx configuration and restart
+  shell: >
+     nginx -t && systemctl reload nginx

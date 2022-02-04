@@ -16,6 +16,11 @@
   tags:
     - nginx_configure
 
+- include: systemd.yml
+  become: true
+  tags:
+    - nginx_systemd
+
 - include: services.yml
   become: true
   tags:

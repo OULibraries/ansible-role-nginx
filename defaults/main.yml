@@ -11,3 +11,6 @@ nginx_sites: !!null
 
 # Location on control machine to source key material
 tls_cert_path: "{{ role_path }}/../../tls_certs"
+
+# Sets targets, mounts, services, etc. that nginx should start after
+nginx_systemd_after: "network-online.target remote-fs.target nss-lookup.target"
