@@ -13,3 +13,8 @@
   shell: |
     semanage fcontext -a -t httpd_unit_file_t "/usr/lib/systemd/system/nginx.service.d(/.*)?"
     restorecon -rv "/usr/lib/systemd/system/nginx.service.d"
+
+- name: Do systemd daemon-reload to pick up config changes
+  systemd:
+    daemon_reload: yes
+    name: nginx
