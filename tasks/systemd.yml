@@ -2,17 +2,14 @@
 
 - name: Copy custom systemd service file for nginx
   template:
-    src: nginx.service.j2
-    dest: /usr/lib/systemd/system/nginx.service
+    src: 00-RequireMountsFor.j2
+    dest: /usr/lib/systemd/system/nginx.service.d/00-RequireMountsFor.conf
     mode: 0644
     owner: root
     group: root
+  when: nginx_RequireMountsFor | default(None)
     
 - name: Set SELinux context for nginx.service
   shell: |
-    semanage fcontext -a -t httpd_unit_file_t "/usr/lib/systemd/system/nginx.service"
-    restorecon -rv "/usr/lib/systemd/system/nginx.service"
-
-- name: Test nginx configuration and restart
-  shell: >
-     nginx -t && systemctl reload nginx
+    semanage fcontext -a -t httpd_unit_file_t "/usr/lib/systemd/system/nginx.service.d(/.*)?"
+    restorecon -rv "/usr/lib/systemd/system/nginx.service.d"
