@@ -3,7 +3,7 @@
 - name: Copy custom systemd service file for nginx
   template:
     src: 00-RequireMountsFor.j2
-    dest: /usr/lib/systemd/system/nginx.service.d/00-RequireMountsFor.conf
+    dest: /etc/systemd/system/nginx.service.d/00-RequireMountsFor.conf
     mode: 0644
     owner: root
     group: root
@@ -11,8 +11,8 @@
     
 - name: Set SELinux context for nginx.service
   shell: |
-    semanage fcontext -a -t httpd_unit_file_t "/usr/lib/systemd/system/nginx.service.d(/.*)?"
-    restorecon -rv "/usr/lib/systemd/system/nginx.service.d"
+    semanage fcontext -a -t httpd_unit_file_t "/etc/systemd/system/nginx.service.d(/.*)?"
+    restorecon -rv "/etc/systemd/system/nginx.service.d"
 
 - name: Do systemd daemon-reload to pick up config changes
   systemd:
