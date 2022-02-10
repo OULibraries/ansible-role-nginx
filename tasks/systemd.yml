@@ -2,7 +2,7 @@
 
 - name: Copy custom systemd service file for nginx
   template:
-    src: 00-RequireMountsFor.j2
+    src: 00-RequireMountsFor.conf.j2
     dest: /etc/systemd/system/nginx.service.d/00-RequireMountsFor.conf
     mode: 0644
     owner: root
