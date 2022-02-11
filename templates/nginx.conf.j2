@@ -26,6 +26,9 @@ http {
 
     access_log  /var/log/nginx/access.log  main;
 
+    ## hide the nginx version when showing return codes to users in the browser
+    server_tokens off;
+
     ## some http scope optimizations
     sendfile           on;
     tcp_nopush         on;
